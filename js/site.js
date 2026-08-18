@@ -90,3 +90,25 @@
     });
   }
 }());
+
+/* The Sermon Song words-to-notation cross-fade.
+
+   The class is added by script, not written into the stylesheet, so the
+   default rendering for a visitor whose JS never runs is both layers
+   visible rather than an empty band. Everything after that is CSS. */
+(function () {
+  var morph = document.querySelector('[data-morph]');
+  if (!morph || !('IntersectionObserver' in window)) { return; }
+
+  document.documentElement.classList.add('js-morph');
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('is-lit'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.45 });
+  io.observe(morph);
+
+  // If the band is taller than the viewport the threshold can never be met.
+  window.setTimeout(function () { morph.classList.add('is-lit'); }, 5000);
+}());
