@@ -587,7 +587,7 @@ html.anim .rv.in{ opacity:1; transform:none; }
     .plate-b,.plate-c{ grid-column:span 3; }
 
     .ledger li{ grid-template-columns:1fr; gap:6px; }
-    .vol{ grid-template-columns:120px 1fr; gap:22px; }
+    .vol{ grid-template-columns:170px 1fr; gap:26px; }
     .specs li{ grid-template-columns:1fr; gap:4px; }
     .specs .k{ padding-top:0; }
 }
@@ -1084,3 +1084,73 @@ html.anim .rv.in{ opacity:1; transform:none; }
 .plates .plate-tall{ grid-column:span 5; }
 .plates .plate-b{ grid-column:span 3; }
 .plates .plate-wide{ grid-column:span 4; }
+
+/* ============================================================
+   21. FINAL POLISH
+   ============================================================ */
+
+/* The closing portrait is the emotional end of the story, so it runs taller
+   than the working overlays and reveals more slowly than anything else. */
+.overlay-close{ min-height:clamp(600px,96vh,1120px); }
+.js-motion .overlay-close > img{ transform:scale(1.05); }
+.js-motion .overlay-close.in-view > img{
+    transform:scale(1);
+    transition:clip-path 1.5s cubic-bezier(.22,.7,.25,1), transform 2.4s cubic-bezier(.22,.7,.25,1);
+}
+
+/* Hover affordance on the covers that lead somewhere. It is a label, not a
+   button: the whole title row is already the link, and adding a second
+   control would say "shop" where the page is trying to say "library". */
+.vol-cover{ position:relative; }
+.vol-peek{
+    position:absolute; left:50%; bottom:14px; transform:translate(-50%,10px);
+    z-index:3; opacity:0; pointer-events:none; white-space:nowrap;
+    padding:9px 16px; background:rgba(19,28,39,.92); color:var(--paper);
+    font-size:11.5px; letter-spacing:.14em; text-transform:uppercase;
+    transition:opacity .35s ease, transform .35s cubic-bezier(.22,.7,.25,1);
+}
+@media (hover:hover) and (pointer:fine){
+    .vol:hover .vol-peek, .vol:focus-within .vol-peek{ opacity:1; transform:translate(-50%,0); }
+}
+
+/* A life unfolding rather than a list of credentials: the four milestones
+   that matter get room around them and a mark on the rule. */
+.ledger li.major{ position:relative; }
+.ledger li.major::before{
+    content:""; position:absolute; left:-4px; top:calc(clamp(20px,2.4vw,34px) + 12px);
+    width:7px; height:7px; border-radius:50%; background:var(--brass);
+}
+.ledger li.major + li:not(.major){ padding-top:clamp(18px,2vw,28px); }
+.ledger li.major p{ font-size:15.5px; max-width:52ch; }
+
+@media (prefers-reduced-motion: reduce){
+    .vol-peek{ transition:none; }
+    .js-motion .overlay-close > img{ transform:none; transition:none; }
+}
+
+/* Book covers measured 0x0 at every width up to 700px — the entire catalogue
+   was invisible on phones and small tablets, while the titles beside it
+   rendered normally, so nothing looked broken.
+
+   Cause: once the row stacks, .vol-cover has no definite width, and its only
+   child is an <img width:100%>. A percentage against an indefinite parent
+   resolves to auto, the parent then sizes to its content, and the two agree
+   on zero. Giving the cover a real width breaks the circle. The audit missed
+   it because a 0x0 image is neither overflowing nor broken — naturalWidth was
+   600 the whole time. */
+@media (max-width:700px){
+    /* Five separate media blocks set grid-template-columns on .vol, and the one
+       that won left a zero-width first track, so every book cover measured 0x0
+       from 700px down — the whole catalogue invisible on phones while the
+       titles beside it rendered normally. Rather than add a sixth column rule
+       and hope, take the row out of grid entirely below 700px: display:block
+       has no tracks to collapse, and .shelf-list .vol outranks every plain
+       .vol rule in the file. The cover is then sized absolutely with max-width
+       cleared — the global img{max-width:100%} was resolving against the
+       zero-width parent and clamping the image back to nothing. */
+    .shelf-list .vol{ display:block; }
+    .shelf-list .vol > *{ margin-bottom:20px; }
+    .shelf-list .vol > *:last-child{ margin-bottom:0; }
+    .vol-cover{ width:auto; max-width:none; }
+    .vol-cover img{ width:clamp(130px,40vw,220px); height:auto; max-width:none; }
+}
