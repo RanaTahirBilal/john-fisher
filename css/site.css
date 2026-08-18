@@ -55,7 +55,7 @@ body{
     font-size:17px;
     line-height:1.75;
     -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
+    overflow-x:clip;
 }
 
 img{ max-width:100%; height:auto; display:block; }
@@ -135,7 +135,7 @@ section{ position:relative; }
 
 .rail-foot{
     margin-top:auto; font-size:12px; letter-spacing:.2em; text-transform:uppercase;
-    color:rgba(239,231,218,.4); writing-mode:vertical-rl; transform:rotate(180deg);
+    color:rgba(239,231,218,.62); writing-mode:vertical-rl; transform:rotate(180deg);
 }
 
 .page{ margin-left:var(--rail); position:relative; z-index:2; }
@@ -242,12 +242,15 @@ section{ position:relative; }
     font-family:var(--display); font-size:clamp(58px,7vw,116px); font-weight:400;
     line-height:.8; color:var(--rule); letter-spacing:-.03em;
 }
-.band-navy .chapter-num{ color:rgba(255,255,255,.17); }
+.band-navy .chapter-num{ color:rgba(255,255,255,.30); }
 .chapter-title{ }
 .chapter-title .kicker{
     font-size:12px; letter-spacing:.24em; text-transform:uppercase;
     color:var(--brass); display:block; margin-bottom:10px;
 }
+/* The dark brass is calibrated for ivory and paper. On the navy band it read
+   3.22:1, under the 4.5:1 floor; --brass-light is the navy-ground twin. */
+.band-navy .chapter-title .kicker{ color:var(--brass-light); }
 .chapter-title h2{ font-size:clamp(31px,4.1vw,60px); font-weight:400; letter-spacing:-.02em; }
 
 .split{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(34px,5vw,84px); align-items:center; }
@@ -279,6 +282,7 @@ section{ position:relative; }
     font-size:12px; letter-spacing:.22em; text-transform:uppercase;
     color:var(--brass); margin-bottom:16px; display:block;
 }
+.band-navy .doc .stamp{ color:var(--brass-light); }   /* was 2.85:1 on navy */
 .doc h3{ font-size:clamp(20px,1.9vw,27px); font-weight:400; margin-bottom:14px; }
 .doc p{ margin:0; font-size:15.5px; line-height:1.7; color:var(--muted); }
 .band-navy .doc p{ color:#AFC0D0; }
@@ -611,3 +615,73 @@ html.anim .rv.in{ opacity:1; transform:none; }
 .eyebrow{ letter-spacing:.2em; }
 .vol-kind,.hero-stamp,.doc .stamp,.chapter-title .kicker{ letter-spacing:.18em; }
 .rail nav a{ letter-spacing:.14em; }
+
+/* ============================================================
+   17. EDITORIAL PHOTOGRAPHY
+   A photograph is set as a document plate, not a card: a hairline
+   above it, the image itself, then a caption in the same brass
+   small-caps used for every other label on the page. No shadow,
+   no rounded corner, no hover lift — those read as UI, and this
+   is meant to read as print.
+   ============================================================ */
+.photo{ margin:clamp(46px,7vw,92px) 0 0; }
+.photo img{
+    display:block; width:100%; height:auto;
+    border-top:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
+}
+.band-navy .photo img{ border-color:rgba(201,168,104,.34); }
+
+.photo figcaption{
+    display:flex; gap:14px; align-items:baseline;
+    margin-top:14px;
+    font-size:12.5px; line-height:1.5; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--brass);
+}
+.band-navy .photo figcaption{ color:var(--brass-light); }
+.photo figcaption b{
+    font-weight:600; white-space:nowrap;
+    border-right:1px solid var(--rule); padding-right:14px;
+}
+.band-navy .photo figcaption b{ border-color:rgba(201,168,104,.4); }
+.photo figcaption span{
+    letter-spacing:.02em; text-transform:none; font-size:13.5px;
+    color:var(--muted); font-style:italic;
+}
+.band-navy .photo figcaption span{ color:rgba(246,241,231,.72); }
+
+/* Full-bleed variant: escapes .wrap and runs edge to edge.
+   Only used where the source file is genuinely wide enough. */
+/* transform:translateX(-50%) leaves the untransformed box sticking out to the
+   right and adds it to the document's scroll width — the desktop audit caught
+   768px of horizontal overflow from exactly that. Margin-only bleed has no
+   phantom box. body uses overflow-x:clip rather than hidden because clip does
+   not create a scroll container, so the sticky rail nav keeps working. */
+.photo-bleed{
+    /* The bleed target is the .page column, not the viewport: the fixed rail
+       occupies var(--rail) on the left, so a plain 100vw ran 96px past the
+       right edge (the audit read 48px of it at every desktop width). --rail
+       collapses to 0 under 900px, so one formula covers every viewport. */
+    --bleed:calc(100vw - var(--rail));
+    width:var(--bleed); max-width:var(--bleed);
+    margin-left:calc(50% - var(--bleed) / 2);
+    margin-right:calc(50% - var(--bleed) / 2);
+}
+.photo-bleed figcaption{
+    max-width:1320px; margin-left:auto; margin-right:auto;
+    padding-inline:var(--gutter);
+}
+.photo-bleed img{ max-height:74vh; object-fit:cover; object-position:center 32%; }
+
+/* Paired with body copy rather than standing alone. */
+.photo-inset{ margin-top:clamp(34px,5vw,58px); }
+
+@media (max-width:900px){
+    .photo figcaption{ flex-direction:column; gap:6px; }
+    /* nowrap keeps the plate label on one line beside the note on wide screens,
+       but at 280px "Plate III - The Sermon Song Singers" is 292px wide and
+       pushed the whole document 32px sideways. Once the caption stacks there is
+       nothing left to keep on one line, so let it wrap. */
+    .photo figcaption b{ border-right:0; padding-right:0; white-space:normal; }
+    .photo-bleed img{ max-height:none; }
+}
