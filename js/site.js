@@ -112,3 +112,96 @@
   // If the band is taller than the viewport the threshold can never be met.
   window.setTimeout(function () { morph.classList.add('is-lit'); }, 5000);
 }());
+
+/* Motion controller: hero entrance, mask reveals, timeline draw, stat count-up,
+   hero parallax. One observer drives everything that reacts to scroll.
+
+   .js-motion is set here rather than in the stylesheet so that the start
+   states (opacity 0, clipped) only exist when something is guaranteed to
+   clear them. If this file fails to parse, the page renders fully visible. */
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!('IntersectionObserver' in window)) { return; }
+
+  var root = document.documentElement;
+  if (!reduce) { root.classList.add('js-motion'); }
+
+  /* ---- hero entrance ---- */
+  var art = document.querySelector('.hero-art');
+  var text = document.querySelector('.hero-text');
+  requestAnimationFrame(function () {
+    if (art) { art.classList.add('in'); }
+    window.setTimeout(function () { if (text) { text.classList.add('in'); } }, 120);
+  });
+
+  /* ---- one observer for every scroll-driven section ---- */
+  var targets = [].slice.call(document.querySelectorAll('.spread, .overlay, .quote-plate, .ledger'));
+  if (targets.length) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) { return; }
+        e.target.classList.add('in-view');
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.16, rootMargin: '0px 0px -6% 0px' });
+    targets.forEach(function (t) { io.observe(t); });
+
+    // Anything already on screen at load, or missed, is shown outright.
+    window.setTimeout(function () {
+      targets.forEach(function (t) { t.classList.add('in-view'); });
+    }, 5000);
+  }
+
+  /* ---- statistics count up once ----
+     Only whole numbers are animated. A value like "50+" keeps its suffix, and
+     anything non-numeric is left exactly as written. */
+  var stats = [].slice.call(document.querySelectorAll('.stat b'));
+  stats.forEach(function (el) {
+    var raw = (el.textContent || '').trim();
+    var m = raw.match(/^(\d+)(\D*)$/);
+    if (!m || reduce) { return; }
+    var end = parseInt(m[1], 10);
+    if (end > 999) { return; }   // years stay put
+    var suffix = m[2] || '';
+    var pad = m[1].length > 1 && m[1][0] === '0' ? m[1].length : 0;
+    var fmt = function (n) {
+      var v = String(n);
+      while (pad && v.length < pad) { v = '0' + v; }
+      return v + suffix;
+    };
+    el.textContent = fmt(0);
+
+    var sio = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting) { return; }
+      sio.disconnect();
+      var t0 = null;
+      var run = function (ts) {
+        if (t0 === null) { t0 = ts; }
+        var k = Math.min((ts - t0) / 900, 1);
+        var eased = 1 - Math.pow(1 - k, 3);
+        el.textContent = fmt(Math.round(end * eased));
+        if (k < 1) { requestAnimationFrame(run); }
+      };
+      requestAnimationFrame(run);
+    }, { threshold: 0.6 });
+    sio.observe(el);
+  });
+
+  /* ---- hero parallax, capped and desktop only ----
+     Bound to rAF and skipped entirely on coarse pointers, where the paint
+     cost is real and the effect is barely visible. */
+  var fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  var heroImg = art && art.querySelector('img');
+  if (heroImg && fine && !reduce) {
+    var ticking = false;
+    var move = function () {
+      ticking = false;
+      var y = window.pageYOffset;
+      if (y > window.innerHeight) { return; }
+      heroImg.style.transform = 'translate3d(0,' + Math.min(y * 0.08, 26) + 'px,0)';
+    };
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(move); }
+    }, { passive: true });
+  }
+}());
