@@ -124,7 +124,26 @@
   if (!('IntersectionObserver' in window)) { return; }
 
   var root = document.documentElement;
-  if (!reduce) { root.classList.add('js-motion'); }
+
+  /* Arm the animation only while the tab is actually being looked at.
+     CSS transitions are suspended in a hidden tab exactly as rAF is, so
+     arming it early leaves the hero sitting in its start state — clipped and
+     transparent — for anything that renders without a visible viewport: a
+     background tab, a crawler, a link-preview screenshotter. Without
+     .js-motion every element keeps its resting state, which is visible. */
+  var arm = function () {
+    if (reduce || root.classList.contains('js-motion')) { return; }
+    root.classList.add('js-motion');
+  };
+  if (document.visibilityState === 'visible') {
+    arm();
+  } else {
+    document.addEventListener('visibilitychange', function once () {
+      if (document.visibilityState !== 'visible') { return; }
+      document.removeEventListener('visibilitychange', once);
+      arm();
+    });
+  }
 
   /* ---- hero entrance ---- */
   var art = document.querySelector('.hero-art');
