@@ -1,0 +1,341 @@
+/* John W. Fisher — custom layer.
+   Loaded last, after style.css. Nothing in the vendor directory is edited, so
+   the template stays upgradeable and every deliberate change is in one file.
+   Each block says what it is for. */
+
+:root{
+    --jf-ink:#1C2A39;        /* headings, body text on light             */
+    --jf-ink-soft:#54657A;   /* secondary copy                           */
+    --jf-sea:#1F5F8B;        /* primary action, links                    */
+    --jf-sea-dark:#164A6D;   /* hover / focus                            */
+    --jf-palm:#3E7C59;       /* accent, used sparingly                   */
+    --jf-sand:#F7F4EE;       /* page background                          */
+    --jf-card:#FFFFFF;
+    --jf-line:#E3DED4;
+}
+
+/* ---------------------------------------------------------------
+   1. Palette override.
+   The demo ships a bright green accent that reads as a tech startup.
+   A poet in Fort Myers gets sea blue and sand instead.
+   --------------------------------------------------------------- */
+body{ background:var(--jf-sand); color:var(--jf-ink-soft); }
+.main-color{ color:var(--jf-sea) !important; }
+h1,h2,h3,h4,h5,h6,.title{ color:var(--jf-ink); }
+
+.btn-green,.jf-submit{
+    background:var(--jf-sea) !important;
+    border-color:var(--jf-sea) !important;
+    color:#fff !important;
+}
+.btn-green:hover,.jf-submit:hover{
+    background:var(--jf-sea-dark) !important;
+    border-color:var(--jf-sea-dark) !important;
+}
+
+.sub-title{ letter-spacing:.12em; text-transform:uppercase; font-size:13px; }
+
+/* Sidebar nav: the active state was the demo green. */
+.left-nav .nav-link.active,
+.left-nav .nav-link:hover,
+.navbar-nav .nav-link.active{ color:var(--jf-sea) !important; }
+
+/* Decorative shapes in the hero, recoloured off the demo green. */
+.shape-square{ background:var(--jf-palm) !important; opacity:.28; }
+.shape-triangle{ border-bottom-color:var(--jf-sea) !important; opacity:.35; }
+.shape-circle{ border-color:var(--jf-sea) !important; }
+.shape-plus{ color:var(--jf-palm) !important; }
+
+/* ---------------------------------------------------------------
+   2. Hero.
+   The demo hero is a cut-out PNG of a model on a coloured blob. A real
+   photograph needs a frame, not a blob.
+   --------------------------------------------------------------- */
+.jf-eyebrow{
+    letter-spacing:.16em; text-transform:uppercase; font-size:13px;
+    color:var(--jf-ink-soft); margin-bottom:14px;
+}
+.heading-box h2{ font-size:clamp(38px,6vw,64px); line-height:1.06; margin-bottom:20px; }
+.jf-lead{ font-size:18px; line-height:1.7; max-width:46ch; }
+
+.slider-image img{
+    width:100%; max-width:560px; height:auto; display:block;
+    border-radius:6px; box-shadow:0 26px 60px rgba(28,42,57,.22);
+    margin-inline:auto;
+}
+
+.jf-cta{ margin-top:26px; }
+
+/* ---------------------------------------------------------------
+   3. Feature items in About.
+   --------------------------------------------------------------- */
+.feature-item{
+    background:var(--jf-card); border:1px solid var(--jf-line);
+    border-radius:8px; padding:26px 22px; margin-bottom:18px;
+}
+.feature-item .f-icon{ color:var(--jf-sea); font-size:26px; margin-bottom:12px; display:block; }
+.feature-item .title{ font-size:18px; margin-bottom:8px; }
+.feature-item p{ font-size:15px; line-height:1.65; margin:0; }
+
+/* ---------------------------------------------------------------
+   4. Practice list, replacing the demo's percentage progress bars.
+   A bar reading "Poetry 80%" is meaningless and reads as filler. Plain
+   headed paragraphs say more and survive a screen reader.
+   --------------------------------------------------------------- */
+.jf-practice{ list-style:none; padding:0; margin:0 0 34px; }
+.jf-practice li{ padding:0 0 20px; margin-bottom:20px; border-bottom:1px solid var(--jf-line); }
+.jf-practice li:last-child{ border-bottom:0; }
+.jf-practice h6{ font-size:17px; margin-bottom:6px; color:var(--jf-ink); }
+.jf-practice p{ font-size:15px; line-height:1.65; margin:0; }
+
+.jf-counters{ display:flex; flex-wrap:wrap; gap:26px; }
+.jf-counters .counters{ display:flex; align-items:center; gap:10px; }
+.jf-counters .c-icon{ color:var(--jf-sea); font-size:24px; }
+.jf-counters h4{ color:var(--jf-ink); font-size:28px; }
+.jf-counters p{ font-size:13px; margin:0; }
+
+/* ---------------------------------------------------------------
+   5. Career timeline.
+   --------------------------------------------------------------- */
+.jf-timeline{
+    background:var(--jf-card); border:1px solid var(--jf-line);
+    border-radius:10px; padding:34px 30px;
+}
+.jf-timeline ol{ list-style:none; padding:0; margin:22px 0 0; }
+.jf-timeline li{
+    position:relative; padding:0 0 26px 26px;
+    border-left:2px solid var(--jf-line);
+}
+.jf-timeline li:last-child{ border-left-color:transparent; padding-bottom:0; }
+.jf-timeline li::before{
+    content:""; position:absolute; left:-7px; top:6px;
+    width:12px; height:12px; border-radius:50%;
+    background:var(--jf-sea); border:2px solid var(--jf-card);
+}
+.jf-year{
+    display:inline-block; font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--jf-sea); margin-bottom:4px;
+}
+.jf-timeline h5{ font-size:17px; margin-bottom:6px; }
+.jf-timeline p{ font-size:15px; line-height:1.65; margin:0; }
+
+/* ---------------------------------------------------------------
+   6. Book grid.
+   The demo used cubeportfolio with a lightbox. Books need a title and a
+   description next to the cover, not a hover overlay that a touch device
+   cannot trigger, so this is a plain CSS grid.
+   --------------------------------------------------------------- */
+.jf-books-head{ margin-bottom:40px; }
+.jf-books-head .title{ font-size:clamp(28px,4vw,40px); }
+
+.jf-book-grid{
+    display:grid; gap:26px;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+}
+.jf-book{
+    background:var(--jf-card); border:1px solid var(--jf-line);
+    border-radius:10px; overflow:hidden; height:100%;
+    display:flex; flex-direction:column;
+}
+.jf-book-cover{ position:relative; background:#EFE9E0; }
+.jf-book-cover img{
+    display:block; width:100%; height:230px; object-fit:cover; object-position:center top;
+}
+.jf-status{
+    position:absolute; top:12px; left:12px;
+    background:rgba(28,42,57,.88); color:#fff;
+    font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+    padding:5px 10px; border-radius:3px;
+}
+.jf-book-body{ padding:22px; }
+.jf-kind{ font-size:12px; letter-spacing:.08em; text-transform:uppercase; margin-bottom:8px; }
+.jf-book-body h5{ font-size:18px; line-height:1.35; margin-bottom:10px; }
+.jf-blurb{ font-size:14.5px; line-height:1.65; margin:0; }
+
+/* ---------------------------------------------------------------
+   7. Honors grid, replacing the demo's testimonial carousel.
+   He has awards, not client quotes, and a carousel would hide most of
+   them behind controls the demo ships switched off.
+   --------------------------------------------------------------- */
+.jf-honor-grid{ row-gap:26px; }
+.jf-honor{
+    background:var(--jf-card); border:1px solid var(--jf-line);
+    border-radius:10px; padding:28px 24px; height:100%;
+}
+.jf-honor i{ color:var(--jf-sea); font-size:26px; display:block; margin-bottom:12px; }
+.jf-honor-year{
+    display:inline-block; font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--jf-palm); margin-bottom:6px;
+}
+.jf-honor h5{ font-size:17px; margin-bottom:8px; }
+.jf-honor p{ font-size:14.5px; line-height:1.65; margin:0; }
+
+/* ---------------------------------------------------------------
+   8. Contact.
+   The demo used placeholders as labels, which vanish the moment someone
+   types and leave a screen reader with an unlabelled field.
+   --------------------------------------------------------------- */
+.jf-label{
+    display:block; font-size:13px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--jf-ink); margin-bottom:6px;
+}
+.contact-form .form-control{
+    border:1px solid var(--jf-line); border-radius:6px; background:var(--jf-card);
+    min-height:48px; padding:12px 14px; color:var(--jf-ink);
+}
+.contact-form .form-control:focus{ border-color:var(--jf-sea); }
+.jf-submit{ border:0; cursor:pointer; }
+
+.jf-address li{ display:flex; gap:14px; align-items:flex-start; }
+.jf-address i{ font-size:22px; margin-top:4px; }
+.jf-address p{ margin:0; line-height:1.7; }
+.jf-address a{ color:var(--jf-sea); }
+.jf-address a:hover{ color:var(--jf-sea-dark); text-decoration:underline; }
+
+.jf-social{ list-style:none; padding:0; margin:6px 0 0; display:flex; flex-wrap:wrap; gap:8px 18px; }
+.jf-social a{ font-size:15px; }
+
+.jf-provenance{
+    margin-top:30px; padding-top:18px; border-top:1px solid var(--jf-line);
+    font-size:13px; line-height:1.7; color:var(--jf-ink-soft);
+}
+
+/* ---------------------------------------------------------------
+   9. Reveal safety net.
+   WOW.js sets visibility:hidden on every .wow element and clears it on a
+   scroll callback. Miss the callback and the content is gone for good.
+   CSS defaults to visible; jf-ux.js opts into the animation. A script
+   failure costs an effect, never the page.
+   --------------------------------------------------------------- */
+.wow,.animated{
+    visibility:visible !important;
+    animation-name:none !important; animation:none !important;
+    opacity:1 !important;
+}
+html.jf-anim .wow{
+    opacity:0; transform:translateY(18px);
+    transition:opacity .7s ease, transform .7s ease;
+}
+html.jf-anim .wow.jf-in{ opacity:1 !important; transform:none; }
+
+@media (prefers-reduced-motion: reduce){
+    html.jf-anim .wow{ opacity:1 !important; transform:none !important; transition:none !important; }
+}
+
+/* ---------------------------------------------------------------
+   10. Focus visibility.
+   box-shadow rather than outline: a shorthand outline carrying a custom
+   property becomes a pending-substitution value and loses the cascade
+   against the template's own outline resets.
+   --------------------------------------------------------------- */
+html body *:focus-visible{
+    box-shadow:0 0 0 3px var(--jf-sand), 0 0 0 6px var(--jf-sea) !important;
+    border-radius:3px; position:relative; z-index:5;
+}
+
+/* ---------------------------------------------------------------
+   11. Touch targets.
+   --------------------------------------------------------------- */
+.left-nav .nav-link,
+.navbar-nav .nav-link{ min-height:44px; display:flex; align-items:center; }
+.jf-social a{ display:inline-block; padding:10px 0; min-height:44px; }
+.jf-address a[href^="tel:"],
+.jf-address a[href^="mailto:"]{ display:inline-block; padding:6px 0; min-height:44px; }
+.menu-icon,.nav-toggle,.navbar-toggler{ min-width:44px; min-height:44px; }
+
+/* ---------------------------------------------------------------
+   12. Overflow guard and responsive trims.
+   --------------------------------------------------------------- */
+html,body{ overflow-x:hidden; }
+img,video{ max-width:100%; }
+
+@media (max-width: 991px){
+    .pt-page{ padding-top:88px; padding-bottom:56px; }
+    .slider-image img{ max-width:420px; }
+    .jf-timeline{ margin-top:34px; padding:28px 22px; }
+    .pr-lg-5,.pl-lg-4{ padding-right:15px !important; padding-left:15px !important; }
+}
+
+@media (max-width: 575px){
+    .jf-book-grid{ grid-template-columns:1fr; }
+    .jf-counters{ gap:18px; }
+    .jf-book-cover img{ height:200px; }
+    .heading-box h2{ font-size:34px; }
+}
+
+/* ---------------------------------------------------------------
+   13. Hero disc.
+   The demo puts the portrait on a full-saturation circle. That worked for a
+   flat cut-out illustration and fights a real photograph, so the disc drops
+   back to sand with a thin rule and the photo carries the contrast.
+   --------------------------------------------------------------- */
+.slider-image{
+    background-color:#EDE6DA !important;
+    border:1px solid var(--jf-line);
+}
+
+/* Sidebar brand block: the demo ships a coloured tile with its own logo. */
+.logo,.logo-text{ background:var(--jf-sea) !important; }
+.jf-mark{
+    display:flex; align-items:center; justify-content:center;
+    width:100%; height:90px; margin:0;
+    color:#fff; font-size:22px; letter-spacing:.14em; font-weight:600;
+}
+.jf-mark:hover{ color:#fff; }
+
+/* ---------------------------------------------------------------
+   14. Section heading sizes.
+   The demo sets one huge display size for every .title. In a two-column
+   section that leaves a five-line headline next to body copy.
+   --------------------------------------------------------------- */
+#services .heading-area .title,
+#about .heading-area .title{ font-size:clamp(26px,2.6vw,36px); line-height:1.2; }
+#services .heading-area{ margin-bottom:28px; }
+
+/* ---------------------------------------------------------------
+   15. Hero container on small screens.
+   .slider-image is a border-radius:50% disc sized for a cut-out PNG. With a
+   real rectangular photograph inside it, the disc shrinks the picture on
+   phones and adds nothing. The photograph is the visual; the disc goes.
+   --------------------------------------------------------------- */
+.slider-image{
+    border-radius:10px !important;
+    background:transparent !important;
+    border:0 !important;
+    top:0 !important;
+    padding:0 !important;
+}
+@media (max-width: 991px){
+    .slider-image{ margin-bottom:34px; }
+    .slider-image img{ max-width:340px; }
+    .heading-box{ text-align:center; }
+    .jf-lead{ margin-inline:auto; }
+}
+
+/* ---------------------------------------------------------------
+   16. Two tap targets the audit caught.
+   The hero call to action rendered 133x29, and the social links were as
+   narrow as 11px because one of them is a single character.
+   --------------------------------------------------------------- */
+.jf-cta{
+    display:inline-flex; align-items:center;
+    min-height:44px; padding:10px 2px;
+}
+.jf-social a{ min-width:44px; text-align:left; }
+
+/* ---------------------------------------------------------------
+   17. Hero vertical rhythm.
+   With the demo's cut-out PNG the section needed no padding, because the
+   illustration was shorter than the viewport. A real 700x827 photograph is
+   taller, so without padding the top of his head sits above the fold.
+   --------------------------------------------------------------- */
+#home{ padding-top:64px; padding-bottom:64px; }
+#home .slider-container{ display:flex; align-items:center; min-height:calc(100vh - 128px); }
+.slider-image img{ max-width:440px; }
+
+@media (min-width:1600px){ .slider-image img{ max-width:490px; } }
+@media (max-width: 991px){
+    #home{ padding-top:96px; padding-bottom:56px; }
+    #home .slider-container{ display:block; min-height:0; }
+    .slider-image img{ max-width:300px; }
+}
