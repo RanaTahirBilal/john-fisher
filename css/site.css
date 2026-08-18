@@ -52,13 +52,23 @@ body{
     background:var(--paper);
     color:var(--ink);
     font-family:var(--body);
-    font-size:17px;
-    line-height:1.75;
+    font-size:18px;
+    line-height:1.72;
     -webkit-font-smoothing:antialiased;
     overflow-x:clip;
 }
 
+/* The blanket height:auto exists because an HTML height attribute otherwise
+   wins over width:100% and stretches covers. But it also defeats every
+   object-fit:cover image, which needs a real height to crop against — that
+   is why the hero photograph collapsed to its own aspect ratio instead of
+   filling the viewport. Exempt the elements that are deliberately sized. */
 img{ max-width:100%; height:auto; display:block; }
+.hero-art img,
+.spread-figure img,
+.overlay > img,
+.quote-plate > img,
+.plate-tall img{ height:100%; }
 a{ color:inherit; }
 
 h1,h2,h3,h4{ font-family:var(--display); font-weight:400; margin:0; line-height:1.06; }
@@ -81,7 +91,7 @@ body::before{
 .eyebrow.center::before{ content:""; height:1px; width:70px; background:var(--rule); }
 .eyebrow.center::after{ width:70px; flex:0 0 70px; }
 
-.lede{ font-size:clamp(18px,1.5vw,21px); line-height:1.7; color:var(--muted); max-width:56ch; }
+.lede{ font-size:clamp(19px,1.6vw,24px); line-height:1.7; color:var(--muted); max-width:56ch; }
 .body-copy p{ margin:0 0 1.35em; max-width:62ch; }
 .body-copy p:last-child{ margin-bottom:0; }
 
@@ -151,7 +161,7 @@ section{ position:relative; }
    ================================================================= */
 .hero{
     min-height:100vh; display:grid; align-items:stretch;
-    grid-template-columns:1fr 1fr; background:var(--ivory);
+    grid-template-columns:1.08fr 1fr; background:var(--ivory);
 }
 .hero-art{ position:relative; overflow:hidden; background:var(--navy-deep); }
 .hero-art img{
@@ -160,7 +170,8 @@ section{ position:relative; }
 }
 .hero-art::after{
     content:""; position:absolute; inset:0;
-    background:linear-gradient(to right, rgba(15,32,50,.34), rgba(15,32,50,0) 42%);
+    background:linear-gradient(to right, rgba(15,32,50,.40), rgba(15,32,50,0) 46%),
+               linear-gradient(to top, rgba(15,32,50,.62), rgba(15,32,50,0) 34%);
 }
 .hero-frame{
     position:absolute; inset:26px; border:1px solid rgba(255,255,255,.26);
@@ -178,7 +189,7 @@ section{ position:relative; }
     padding:clamp(40px,7vw,104px) clamp(26px,6vw,92px);
 }
 .hero-text h1{
-    font-size:clamp(46px,6.4vw,104px); letter-spacing:-.022em;
+    font-size:clamp(52px,7.2vw,116px); letter-spacing:-.025em;
     font-weight:400; margin-bottom:26px;
 }
 .hero-text h1 em{
@@ -251,7 +262,7 @@ section{ position:relative; }
 /* The dark brass is calibrated for ivory and paper. On the navy band it read
    3.22:1, under the 4.5:1 floor; --brass-light is the navy-ground twin. */
 .band-navy .chapter-title .kicker{ color:var(--brass-light); }
-.chapter-title h2{ font-size:clamp(31px,4.1vw,60px); font-weight:400; letter-spacing:-.02em; }
+.chapter-title h2{ font-size:clamp(38px,5.2vw,76px); font-weight:400; letter-spacing:-.02em; }
 
 .split{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(34px,5vw,84px); align-items:center; }
 .split.wide-left{ grid-template-columns:1.25fr 1fr; }
@@ -259,7 +270,7 @@ section{ position:relative; }
 
 /* pull quote */
 .pull{
-    font-family:var(--display); font-size:clamp(24px,3.1vw,45px); font-weight:400;
+    font-family:var(--display); font-size:clamp(30px,3.8vw,56px); font-weight:400;
     font-style:italic; line-height:1.28; letter-spacing:-.015em;
     border-left:2px solid var(--brass-rule); padding-left:clamp(20px,3vw,40px);
     margin:0; max-width:24ch;
@@ -283,7 +294,7 @@ section{ position:relative; }
     color:var(--brass); margin-bottom:16px; display:block;
 }
 .band-navy .doc .stamp{ color:var(--brass-light); }   /* was 2.85:1 on navy */
-.doc h3{ font-size:clamp(20px,1.9vw,27px); font-weight:400; margin-bottom:14px; }
+.doc h3{ font-size:clamp(24px,2.2vw,33px); font-weight:400; margin-bottom:14px; }
 .doc p{ margin:0; font-size:15.5px; line-height:1.7; color:var(--muted); }
 .band-navy .doc p{ color:#AFC0D0; }
 
@@ -301,7 +312,7 @@ section{ position:relative; }
     font-family:var(--display); font-size:clamp(17px,1.5vw,22px); font-weight:400;
     color:var(--brass); letter-spacing:.01em;
 }
-.ledger h4{ font-family:var(--display); font-size:clamp(18px,1.6vw,23px); font-weight:400; margin-bottom:7px; }
+.ledger h4{ font-family:var(--display); font-size:clamp(21px,1.9vw,28px); font-weight:400; margin-bottom:7px; }
 .ledger p{ margin:0; font-size:15px; line-height:1.68; color:var(--muted); max-width:64ch; }
 .band-navy .ledger p{ color:#AFC0D0; }
 
@@ -369,7 +380,7 @@ section{ position:relative; }
 .shelf{ padding:clamp(80px,11vw,150px) 0; }
 .shelf-list{ margin-top:clamp(40px,5vw,70px); }
 .vol{
-    display:grid; grid-template-columns:190px 1fr auto; gap:clamp(24px,4vw,60px);
+    display:grid; grid-template-columns:clamp(150px,20vw,290px) 1fr auto; gap:clamp(24px,4vw,64px);
     align-items:start; padding:clamp(30px,4vw,52px) 0; border-top:1px solid var(--rule);
 }
 .vol:last-child{ border-bottom:1px solid var(--rule); }
@@ -383,7 +394,7 @@ section{ position:relative; }
     font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--brass);
     display:block; margin-bottom:12px;
 }
-.vol h3{ font-family:var(--display); font-size:clamp(23px,2.5vw,36px); font-weight:400; margin-bottom:14px; letter-spacing:-.015em; }
+.vol h3{ font-family:var(--display); font-size:clamp(27px,2.9vw,42px); font-weight:400; margin-bottom:14px; letter-spacing:-.015em; }
 .vol p{ margin:0; color:var(--muted); font-size:15.5px; max-width:58ch; }
 .vol-meta{ text-align:right; min-width:150px; }
 .vol-status{
@@ -422,7 +433,7 @@ section{ position:relative; }
     border:1px solid var(--rule); padding:clamp(22px,2.6vw,34px); background:var(--paper);
 }
 .plate-note .n{
-    font-family:var(--display); font-size:clamp(30px,3.4vw,52px); font-weight:400;
+    font-family:var(--display); font-size:clamp(38px,4.4vw,68px); font-weight:400;
     color:var(--brass); line-height:1; margin-bottom:12px;
 }
 .plate-note p{ margin:0; font-size:14.5px; color:var(--muted); }
@@ -441,7 +452,7 @@ section{ position:relative; }
     border-right:1px solid rgba(255,255,255,.2);
 }
 .purpose:last-child{ border-right:0; }
-.purpose h3{ font-size:clamp(20px,2vw,28px); font-weight:400; margin-bottom:12px; }
+.purpose h3{ font-size:clamp(23px,2.2vw,31px); font-weight:400; margin-bottom:12px; }
 .purpose p{ margin:0 0 20px; font-size:15px; color:#AFC0D0; }
 .purpose a{
     font-size:12.5px; letter-spacing:.16em; text-transform:uppercase;
@@ -684,4 +695,261 @@ html.anim .rv.in{ opacity:1; transform:none; }
        nothing left to keep on one line, so let it wrap. */
     .photo figcaption b{ border-right:0; padding-right:0; white-space:normal; }
     .photo-bleed img{ max-height:none; }
+}
+
+/* ============================================================
+   18. LAYOUT VARIETY
+   Eight photographs all set as identical full-bleed plates read
+   as one template repeated. These are the alternative settings:
+   a half-and-half split, a photograph carrying overlaid display
+   type, and a photograph paired with a verified quote. The rule
+   for the page is simply that no two consecutive sections use
+   the same one.
+   ============================================================ */
+
+/* --- TYPE B: image 50% of the viewport, text in the other half --- */
+.spread{
+    --bleed:calc(100vw - var(--rail));
+    width:var(--bleed); max-width:var(--bleed);
+    margin-left:calc(50% - var(--bleed) / 2);
+    margin-right:calc(50% - var(--bleed) / 2);
+    display:grid; grid-template-columns:1fr 1fr; align-items:stretch;
+    margin-top:clamp(46px,7vw,92px);
+}
+.spread-figure{ margin:0; position:relative; overflow:hidden; min-height:clamp(380px,62vh,720px); }
+.spread-figure img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    transition:transform .9s cubic-bezier(.2,.7,.3,1);
+}
+.spread:hover .spread-figure img{ transform:scale(1.02); }
+.spread-body{
+    display:flex; flex-direction:column; justify-content:center;
+    padding:clamp(34px,5vw,86px); background:var(--ivory);
+}
+.band-ivory .spread-body{ background:var(--paper); }
+.spread-body .eyebrow{ margin-bottom:18px; }
+.spread-body h3{
+    font-family:var(--display); font-weight:400; letter-spacing:-.02em;
+    font-size:clamp(30px,3.6vw,54px); line-height:1.08; margin:0 0 20px;
+}
+.spread-body p{ font-size:clamp(17px,1.35vw,19.5px); line-height:1.75; color:var(--muted); max-width:44ch; margin:0 0 1.1em; }
+.spread-flip .spread-figure{ order:2; }
+
+/* --- TYPE C: the photograph carries the headline --- */
+.overlay{
+    --bleed:calc(100vw - var(--rail));
+    position:relative; width:var(--bleed); max-width:var(--bleed);
+    margin-left:calc(50% - var(--bleed) / 2);
+    margin-right:calc(50% - var(--bleed) / 2);
+    min-height:clamp(520px,86vh,940px);
+    display:flex; align-items:flex-end;
+    overflow:hidden; isolation:isolate;
+}
+.overlay > img{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; object-position:center 34%; z-index:-2;
+}
+/* A single gradient, not a flat scrim: the type stays legible at the
+   foot of the frame while the photograph keeps its own light at the top. */
+.overlay::after{
+    content:""; position:absolute; inset:0; z-index:-1;
+    background:
+      linear-gradient(to top,
+        rgba(15,32,50,.94) 0%, rgba(15,32,50,.78) 24%,
+        rgba(15,32,50,.34) 52%, rgba(15,32,50,.06) 76%),
+      linear-gradient(to right,
+        rgba(15,32,50,.62) 0%, rgba(15,32,50,.22) 38%, rgba(15,32,50,0) 66%);
+}
+.overlay-inner{ padding:clamp(34px,6vw,96px); max-width:1320px; width:100%; margin:0 auto; }
+.overlay .eyebrow{ color:var(--brass-light); }
+.overlay h2{
+    font-family:var(--display); font-weight:400; color:#fff;
+    font-size:clamp(44px,7.4vw,124px); line-height:.98; letter-spacing:-.03em;
+    margin:14px 0 0; text-wrap:balance;
+}
+.overlay .stat{
+    display:flex; align-items:baseline; gap:18px; margin-top:clamp(22px,3vw,40px);
+    border-top:1px solid rgba(201,168,104,.4); padding-top:20px; max-width:520px;
+}
+.overlay .stat b{
+    font-family:var(--display); font-weight:400; color:var(--brass-light);
+    font-size:clamp(40px,5vw,76px); line-height:1; letter-spacing:-.03em;
+}
+.overlay .stat span{
+    font-size:14px; letter-spacing:.14em; text-transform:uppercase;
+    color:rgba(246,241,231,.82); line-height:1.5;
+}
+.overlay .credit{
+    position:absolute; right:clamp(14px,2vw,26px); bottom:clamp(10px,1.4vw,16px);
+    font-size:11.5px; letter-spacing:.08em; color:rgba(246,241,231,.62);
+    z-index:1; margin:0;
+}
+
+/* --- TYPE D: photograph as the ground for a verified quote --- */
+.quote-plate{
+    --bleed:calc(100vw - var(--rail));
+    position:relative; width:var(--bleed); max-width:var(--bleed);
+    margin:clamp(46px,7vw,92px) calc(50% - var(--bleed) / 2) 0;
+    min-height:clamp(440px,72vh,760px);
+    display:grid; place-items:center; overflow:hidden; isolation:isolate;
+}
+.quote-plate > img{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; object-position:center 30%; z-index:-2;
+}
+.quote-plate::after{ content:""; position:absolute; inset:0; z-index:-1; background:rgba(15,32,50,.72); }
+.quote-plate blockquote{
+    margin:0; padding:clamp(30px,5vw,72px); max-width:22ch; text-align:center;
+    font-family:var(--display); font-style:italic; font-weight:400; color:#fff;
+    font-size:clamp(28px,4.2vw,64px); line-height:1.16; letter-spacing:-.015em;
+}
+.quote-plate cite{
+    display:block; margin-top:26px; font-style:normal; font-family:var(--body);
+    font-size:12.5px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--brass-light);
+}
+
+@media (max-width:900px){
+    .spread{ grid-template-columns:1fr; }
+    .spread-flip .spread-figure{ order:0; }
+    .spread-figure{ min-height:clamp(280px,52vh,420px); }
+    .overlay{ min-height:clamp(440px,74vh,620px); }
+    .overlay h2{ font-size:clamp(38px,10vw,64px); }
+    .quote-plate blockquote{ max-width:none; }
+}
+
+/* ============================================================
+   19. THE SERMON SONG — words becoming notation
+   Two stacked layers cross-faded on scroll: the words of the
+   reading, then the staff they turned into. The notation is the
+   resting state, so if the script never runs, or motion is
+   reduced, the section still shows the finished idea rather
+   than a blank box.
+   ============================================================ */
+.sermon-lede{ max-width:34ch; color:#AFC0D0 !important; margin-bottom:clamp(30px,4vw,54px); }
+.sermon-lede + .morph{ margin-top:0; }
+
+.morph{
+    position:relative; margin:clamp(34px,5vw,70px) 0;
+    padding:clamp(26px,4vw,52px) 0;
+    border-top:1px solid rgba(201,168,104,.26);
+    border-bottom:1px solid rgba(201,168,104,.26);
+    min-height:clamp(150px,20vw,220px);
+    display:grid; place-items:center;
+}
+.morph-words, .morph-staff{ grid-area:1 / 1; width:100%; }
+
+.morph-words{
+    display:flex; flex-wrap:wrap; justify-content:center;
+    gap:.32em clamp(14px,2vw,30px);
+    font-family:var(--display); font-style:italic; font-weight:400;
+    font-size:clamp(24px,3.6vw,54px); line-height:1.2; color:#F6F1E7;
+    text-align:center;
+}
+.morph-staff{ color:var(--brass-light); max-width:840px; opacity:0; }
+
+/* Resting state when nothing is driving the animation. */
+.morph-staff{ opacity:1; }
+.morph-words{ opacity:1; }
+
+/* Only once the script marks the section as animatable do the two
+   layers become a cross-fade rather than an overlay. */
+.js-morph .morph-staff{ opacity:0; transform:translateY(8px); }
+.js-morph .morph .ms-notes g{ opacity:0; transform:translateY(6px); }
+.js-morph .morph.is-lit .morph-words{ opacity:0; transform:translateY(-10px); }
+.js-morph .morph.is-lit .morph-staff{ opacity:1; transform:none; }
+.js-morph .morph.is-lit .ms-notes g{ opacity:1; transform:none; }
+
+.js-morph .morph-words{ transition:opacity .7s ease .15s, transform .7s ease .15s; }
+.js-morph .morph-staff{ transition:opacity .8s ease .45s, transform .8s ease .45s; }
+.js-morph .ms-notes g{ transition:opacity .5s ease, transform .5s ease; }
+.js-morph .morph.is-lit .ms-notes g:nth-child(1){ transition-delay:.75s; }
+.js-morph .morph.is-lit .ms-notes g:nth-child(2){ transition-delay:.86s; }
+.js-morph .morph.is-lit .ms-notes g:nth-child(3){ transition-delay:.97s; }
+.js-morph .morph.is-lit .ms-notes g:nth-child(4){ transition-delay:1.08s; }
+.js-morph .morph.is-lit .ms-notes g:nth-child(5){ transition-delay:1.19s; }
+.js-morph .morph.is-lit .ms-notes g:nth-child(6){ transition-delay:1.30s; }
+
+.morph-cap{
+    grid-area:1 / 1; align-self:end; justify-self:center;
+    margin:0; transform:translateY(clamp(34px,5vw,60px));
+    font-size:12px; letter-spacing:.2em; text-transform:uppercase;
+    color:rgba(201,168,104,.85);
+}
+
+@media (prefers-reduced-motion: reduce){
+    .js-morph .morph-words{ opacity:0; transition:none; }
+    .js-morph .morph-staff, .js-morph .morph .ms-notes g{ opacity:1; transform:none; transition:none; }
+}
+
+/* Small print under a split-spread body, for the generated-image note. */
+.credit-note{
+    margin-top:auto; padding-top:22px;
+    font-size:12px !important; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--brass) !important;
+}
+.band-navy .credit-note{ color:var(--brass-light) !important; }
+
+/* Featured book: the cover is the hero of this section, so let it run
+   large and give it real physical weight rather than a card border. */
+.feature-grid{ grid-template-columns:0.92fr 1fr; gap:clamp(36px,6vw,110px); }
+.book-plate img{
+    max-width:none; width:100%;
+    box-shadow:0 2px 4px rgba(19,28,39,.10), 0 26px 60px -18px rgba(19,28,39,.42);
+}
+.buy-row{ display:flex; flex-wrap:wrap; gap:14px; margin-top:30px; }
+.avail{ margin-top:16px; font-size:13.5px; color:var(--muted); max-width:46ch; }
+
+@media (max-width:900px){
+    .feature-grid{ grid-template-columns:1fr; }
+    .book-plate img{ max-width:340px; margin:0 auto; }
+}
+
+/* Two failures the contrast audit caught after the layout change.
+
+   1. .spread-body paints itself ivory, but inside the navy band the text
+      colour is still inherited white — "The reading comes first." measured
+      1.13:1. Inside a dark band the panel has to be dark too.
+   2. .overlay relied entirely on the photograph and its gradient for the
+      dark ground under white type. If that image 404s or is still decoding,
+      the type is white on ivory and invisible. A base colour underneath
+      makes the section legible before, and without, the photograph. */
+.overlay{ background:var(--navy-deep); color:#fff; }
+.quote-plate{ background:var(--navy-deep); }
+
+.band-navy .spread-body{ background:#16293D; }
+.band-navy .spread-body h3{ color:#F6F1E7; }
+.band-navy .spread-body p{ color:#AFC0D0; }
+.band-navy .spread-body .eyebrow{ color:var(--brass-light); }
+
+/* Purchase actions live with each title rather than in a separate row, so a
+   reader deciding on a book acts where they are. Only the two titles with a
+   verified retailer listing get a button; the rest keep their status label
+   and nothing that looks clickable. */
+.vol-meta{ display:flex; flex-direction:column; align-items:flex-end; gap:12px; }
+.vol-buy{
+    display:inline-flex; align-items:center; gap:9px; max-width:100%;
+    padding:12px 20px; background:var(--ink); color:var(--paper);
+    font-size:12.5px; letter-spacing:.12em; text-transform:uppercase;
+    text-decoration:none; white-space:nowrap;
+    transition:background .3s ease, transform .3s ease;
+}
+.vol-buy:hover{ background:var(--blue); transform:translateY(-2px); }
+.vol-pub{
+    display:inline-flex; align-items:center; min-height:44px; padding:0 2px;
+    font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--brass); text-decoration:none;
+    box-shadow:inset 0 -1px 0 currentColor;
+}
+.vol-pub:hover{ color:var(--blue); }
+@media (prefers-reduced-motion: reduce){ .vol-buy:hover{ transform:none; } }
+/* The status/buy column is a third grid track. Below 700px there is no room
+   for three tracks, and leaving it to auto-place pushed it into an implicit
+   column 59px past the viewport — which then stretched the fixed drawer to
+   the document's scroll width and failed every mobile viewport at once.
+   Stacking the whole row removes the third track entirely. */
+@media (max-width:700px){
+    .vol{ grid-template-columns:1fr; gap:22px; }
+    .vol-cover{ max-width:220px; }
+    .vol-meta{ flex-direction:row; align-items:center; justify-content:flex-start; flex-wrap:wrap; }
 }
