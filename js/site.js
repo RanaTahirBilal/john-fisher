@@ -129,10 +129,20 @@
   /* ---- hero entrance ---- */
   var art = document.querySelector('.hero-art');
   var text = document.querySelector('.hero-text');
-  requestAnimationFrame(function () {
+
+  /* Not requestAnimationFrame. rAF is throttled to zero in a background tab,
+     and the hero's start state is clipped and transparent — so a visitor who
+     opened the page in a background tab, or a bot rendering it headless, got
+     an invisible hero that only appeared once the tab was focused. Timers
+     keep running when rAF does not, so the reveal is driven by a timer and
+     backed by a hard fallback that shows the hero regardless. */
+  var showHero = function () {
     if (art) { art.classList.add('in'); }
     window.setTimeout(function () { if (text) { text.classList.add('in'); } }, 120);
-  });
+  };
+  window.setTimeout(showHero, 40);
+  window.addEventListener('load', showHero);
+  window.setTimeout(showHero, 2500);
 
   /* ---- one observer for every scroll-driven section ---- */
   var targets = [].slice.call(document.querySelectorAll('.spread, .overlay, .quote-plate, .ledger'));
